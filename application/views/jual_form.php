@@ -79,6 +79,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 
+	<script type="text/javascript">
+	var jumlah_baris = 0;
+	</script>
+
 <div id="container">
 	<h1>Tambah Data Penjualan</h1>
 
@@ -126,7 +130,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tabel_barang">
 								<tr id="tr_0">
 									<td>
 										<select class="" name="id_barang[]">
@@ -141,6 +145,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									<td> <input class="sub_total" id="sub_total_0" type="text" name="sub_total[]" value="0" readonly> </td>
 									<td>&nbsp;</td>
 								</tr>
+								<script type="text/javascript">
+								++jumlah_baris;
+								</script>
 							</tbody>
 						</table>
 					</td>
@@ -148,7 +155,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
-					<td> <button type="button" name="button" onclick="tambah_barang">Tambah Barang</button> </td>
+					<td> <button type="button" name="button" onclick="tambah_barang()">Tambah Barang</button> </td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -199,6 +206,33 @@ function calculate(nomor_baris = 0)
         grand_total += parseFloat($(this).val());
     });
     total.value = grand_total;
+}
+
+function tambah_barang() {
+	$('#tabel_barang').append(
+		`
+		<tr id="tr_`+jumlah_baris+`">
+			<td>
+				<select class="" name="id_barang[]">
+					<option value="">-</option>
+					<?php foreach($barang as $row_barang) { ?>
+						<option value="<?= $row_barang->id_barang ?>"><?= $row_barang->nama ?></option>
+					<?php } ?>
+				</select>
+			</td>
+			<td> <input id="jumlah_`+jumlah_baris+`" type="text" name="jumlah[]" value="0" onblur="calculate(`+jumlah_baris+`)" onkeyup="calculate(`+jumlah_baris+`)"> </td>
+			<td> <input id="harga_`+jumlah_baris+`" type="text" name="harga[]" value="0" onblur="calculate(`+jumlah_baris+`)" onkeyup="calculate(`+jumlah_baris+`)"> </td>
+			<td> <input class="sub_total" id="sub_total_`+jumlah_baris+`" type="text" name="sub_total[]" value="0" readonly> </td>
+			<td> <button type="button" name="button" onclick="hapus_barang(`+jumlah_baris+`)">Hapus Barang</button> </td>
+		</tr>
+		`
+	);
+	++jumlah_baris;
+}
+
+function hapus_barang(nomor_baris) {
+	$('#tr_' + nomor_baris).remove();
+    calculate();
 }
 
 </script>
