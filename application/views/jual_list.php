@@ -112,7 +112,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<td><?= $row_jual->nomor_nota ?></td>
 						<td><?= $row_jual->tanggal ?></td>
 						<td><?= $row_jual->total ?></td>
-						<td> <button type="button" name="button" onclick="javascript: window.location.href='<?= site_url('jual/edit/'.$row_jual->id_jual) ?>'">Edit</button> </td>
+						<td> <button type="button" name="button" onclick="javascript: window.location.href='<?= site_url('jual/update/'.$row_jual->id_jual) ?>'">Edit</button> </td>
 					</tr>
 				<?php } ?>
 			</tbody>

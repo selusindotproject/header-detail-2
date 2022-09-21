@@ -23,8 +23,27 @@ class Jual_model extends CI_Model
         return $this->db->query($q)->result();
     }
 
+    function get_data_by_id_jual($id_jual)
+    {
+        $q = "
+            select
+                *
+            from
+                jual
+            where
+                id_jual = ".$id_jual."
+        ";
+        return $this->db->query($q)->row();
+    }
+
     function insert($data)
     {
         $this->db->insert('jual', $data);
+    }
+
+    function update($id_jual, $data)
+    {
+        $this->db->where('id_jual', $id_jual);
+        $this->db->update('jual', $data);
     }
 }

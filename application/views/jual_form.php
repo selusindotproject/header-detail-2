@@ -97,7 +97,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<!-- <p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="userguide3/">User Guide</a>.</p> -->
 
-		<form class="" action="<?= site_url('jual/create_action') ?>" method="post">
+		<form class="" action="<?= $this->uri->segment(2) == 'create' ? site_url('jual/create_action') : site_url('jual/update_action') ?>" method="post">
+			<input type="hidden" name="id_jual" value="<?= $id_jual ?>">
 
 		<table>
 			<tbody>
@@ -131,23 +132,65 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</tr>
 							</thead>
 							<tbody id="tabel_barang">
-								<tr id="tr_0">
-									<td>
-										<select class="" name="id_barang[]">
-											<option value="">-</option>
-											<?php foreach($barang as $row_barang) { ?>
-												<option value="<?= $row_barang->id_barang ?>"><?= $row_barang->nama ?></option>
+								<?php if ($this->uri->segment(2) == 'create') { ?>
+
+									<?php
+									/**
+									 * tambah data penjualan
+									 */
+									?>
+									<tr id="tr_0">
+										<td>
+											<select class="" name="id_barang[]">
+												<option value="">-</option>
+												<?php foreach($barang as $row_barang) { ?>
+													<option value="<?= $row_barang->id_barang ?>"><?= $row_barang->nama ?></option>
+												<?php } ?>
+											</select>
+										</td>
+										<td> <input id="jumlah_0" type="text" name="jumlah[]" value="0" onblur="calculate(0)" onkeyup="calculate(0)"> </td>
+										<td> <input id="harga_0" type="text" name="harga[]" value="0" onblur="calculate(0)" onkeyup="calculate(0)"> </td>
+										<td> <input class="sub_total" id="sub_total_0" type="text" name="sub_total[]" value="0" readonly> </td>
+										<td>&nbsp;</td>
+									</tr>
+									<script type="text/javascript">
+									++jumlah_baris;
+									</script>
+
+								<?php } else { ?>
+
+									<?php
+									/**
+									 * edit data penjualan
+									 */
+									?>
+									<?php $jumlah_baris = 0 ?>
+									<?php foreach($detil_jual as $row_detil_jual) { ?>
+										<tr id="tr_<?= $jumlah_baris ?>">
+											<td>
+												<select class="" name="id_barang[]">
+													<option value="">-</option>
+													<?php foreach($barang as $row_barang) { ?>
+														<option value="<?= $row_barang->id_barang ?>" <?= $row_barang->id_barang == $row_detil_jual->id_barang ? 'selected' : '' ?>><?= $row_barang->nama ?></option>
+													<?php } ?>
+												</select>
+											</td>
+											<td> <input id="jumlah_<?= $jumlah_baris ?>" type="text" name="jumlah[]" value="<?= $row_detil_jual->jumlah ?>" onblur="calculate(<?= $jumlah_baris ?>)" onkeyup="calculate(<?= $jumlah_baris ?>)"> </td>
+											<td> <input id="harga_<?= $jumlah_baris ?>" type="text" name="harga[]" value="<?= $row_detil_jual->harga ?>" onblur="calculate(<?= $jumlah_baris ?>)" onkeyup="calculate(<?= $jumlah_baris ?>)"> </td>
+											<td> <input class="sub_total" id="sub_total_<?= $jumlah_baris ?>" type="text" name="sub_total[]" value="<?= $row_detil_jual->harga * $row_detil_jual->jumlah ?>" readonly> </td>
+											<?php if ($jumlah_baris == 0) { ?>
+												<td>&nbsp;</td>
+											<?php } else { ?>
+												<td> <button type="button" name="button" onclick="hapus_barang(<?= $jumlah_baris ?>)">Hapus Barang</button> </td>
 											<?php } ?>
-										</select>
-									</td>
-									<td> <input id="jumlah_0" type="text" name="jumlah[]" value="0" onblur="calculate(0)" onkeyup="calculate(0)"> </td>
-									<td> <input id="harga_0" type="text" name="harga[]" value="0" onblur="calculate(0)" onkeyup="calculate(0)"> </td>
-									<td> <input class="sub_total" id="sub_total_0" type="text" name="sub_total[]" value="0" readonly> </td>
-									<td>&nbsp;</td>
-								</tr>
-								<script type="text/javascript">
-								++jumlah_baris;
-								</script>
+										</tr>
+										<script type="text/javascript">
+										++jumlah_baris;
+										</script>
+										<?php ++$jumlah_baris ?>
+									<?php } ?>
+
+								<?php } ?>
 							</tbody>
 						</table>
 					</td>
