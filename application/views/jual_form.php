@@ -75,6 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		box-shadow: 0 0 8px #D0D0D0;
 	}
 	</style>
+	<script src="<?php echo base_url() ?>/jquery.min.js"></script>
 </head>
 <body>
 
@@ -137,7 +138,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									</td>
 									<td> <input id="jumlah_0" type="text" name="jumlah[]" value="0" onblur="calculate(0)" onkeyup="calculate(0)"> </td>
 									<td> <input id="harga_0" type="text" name="harga[]" value="0" onblur="calculate(0)" onkeyup="calculate(0)"> </td>
-									<td> <input id="sub_total_0" type="text" name="sub_total[]" value="0" readonly> </td>
+									<td> <input class="sub_total" id="sub_total_0" type="text" name="sub_total[]" value="0" readonly> </td>
 									<td>&nbsp;</td>
 								</tr>
 							</tbody>
@@ -157,7 +158,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<tr>
 					<td>Total</td>
 					<td>:</td>
-					<td> <input id="total" type="text" name="total" value="<?= $total ?>"> </td>
+					<td> <input id="total" type="text" name="total" value="<?= $total ?>" readonly> </td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -181,6 +182,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
 </div>
+
+<script type="text/javascript">
+
+function calculate(nomor_baris = 0)
+{
+	var jumlah = document.getElementById('jumlah_'+nomor_baris);
+    var harga = document.getElementById('harga_'+nomor_baris);
+    var sub_total = document.getElementById('sub_total_'+nomor_baris);
+    var total = document.getElementById('total');
+
+    sub_total.value = parseFloat(jumlah.value) * parseFloat(harga.value);
+
+    var grand_total = 0;
+    $('.sub_total').each(function() {
+        grand_total += parseFloat($(this).val());
+    });
+    total.value = grand_total;
+}
+
+</script>
 
 </body>
 </html>
