@@ -46,4 +46,10 @@ class Jual_model extends CI_Model
         $this->db->where('id_jual', $id_jual);
         $this->db->update('jual', $data);
     }
+
+    function delete($id_jual)
+    {
+        $this->db->where('id_jual', $id_jual);
+        $this->db->delete('jual');
+    }
 }

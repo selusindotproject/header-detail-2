@@ -178,4 +178,27 @@ class Jual extends CI_Controller
          */
         redirect(site_url('jual'));
     }
+
+    public function delete($id_jual)
+    {
+        $row_jual = $this->Jual_model->get_data_by_id_jual($id_jual);
+        if ($row_jual) {
+
+            /**
+             * hapus data di tabel detil_jual
+             */
+            $this->Detil_jual_model->delete_by_id_jual($id_jual);
+
+            /**
+             * hapus data di tabel jual
+             */
+            $this->Jual_model->delete($id_jual);
+
+            /**
+             * kembali ke list
+             */
+            redirect(site_url('jual'));
+
+        }
+    }
 }
